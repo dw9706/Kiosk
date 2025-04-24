@@ -34,4 +34,9 @@ public class MenuItem {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%-13s | W %.1f | %s", name, price, description);
+    }
 }
