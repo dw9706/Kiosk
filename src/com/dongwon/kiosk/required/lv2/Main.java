@@ -25,17 +25,22 @@ public class Main {
             System.out.println("0. 종료      | 종료");
 
             System.out.print("숫자를 입력해주세요.(0~4사이 숫자): ");
-            int input = Integer.parseInt(sc.nextLine());
+            try {
+                int input = Integer.parseInt(sc.nextLine());
 
-            // 입력값을 프로그램 내부에서 사용하는 인덱스 값으로 변환
-            int menuIndex = toMenuIndex(input);
-            int menuNo = toMenuNo(menuIndex);
 
-            if (0 <= menuIndex && menuIndex <= 3) System.out.println(menuNo + ". " + menus.get(menuIndex) + "\n");
-            else if (menuIndex == -1) {
-                System.out.println("프로그램을 종료합니다.");
-                break;
-            } else System.out.println("올바르지 않은 입력값입니다 : " + input + "\n");
+                // 입력값을 프로그램 내부에서 사용하는 인덱스 값으로 변환
+                int menuIndex = toMenuIndex(input);
+                int menuNo = toMenuNo(menuIndex);
+
+                if (0 <= menuIndex && menuIndex <= 3) System.out.println(menuNo + ". " + menus.get(menuIndex) + "\n");
+                else if (menuIndex == -1) {
+                    System.out.println("프로그램을 종료합니다.");
+                    break;
+                } else System.out.println("올바르지 않은 입력값입니다 : " + input + "\n");
+            } catch (IllegalArgumentException e) {
+                System.out.println("올바르지 않은 입력값입니다 - " + e.getMessage() + "\n");
+            }
         }
     }
 
