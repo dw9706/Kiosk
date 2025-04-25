@@ -20,7 +20,7 @@ public class Kiosk {
             try {
                 //주문 할 때 주문 번호와 취소 번호 미리 초기화
                 int orderIndex = menus.size();
-                int orderCancelIndex = menus.size()+1;
+                int orderCancelIndex = menus.size() + 1;
 
 
                 // 메뉴 목록 출력
@@ -69,7 +69,7 @@ public class Kiosk {
 
     private void printOrderMenu() {
         int ordersIndex = menus.size();
-        int cancelIndex = menus.size() +  1;
+        int cancelIndex = menus.size() + 1;
         System.out.println("\n[ ORDER MENU ]");
         System.out.printf("%d. Orders       | 장바구니를 확인 후 주문합니다.\n", toDisplayNum(ordersIndex));
         System.out.printf("%d. Cancel       | 진행중인 주문을 취소합니다.\n", toDisplayNum(cancelIndex));
@@ -77,27 +77,38 @@ public class Kiosk {
 
     private boolean isOrderMenu(int menuIndex) {
         int ordersIndex = menus.size();
-        int cancelIndex = menus.size() +  1;
+        int cancelIndex = menus.size() + 1;
         return (menuIndex == ordersIndex || menuIndex == cancelIndex);
     }
 
     private boolean askOrder() {
-        System.out.println("아래와 같이 주문 하시겠습니까?\n");
-        System.out.println("[ Orders ]");
-        for (MenuItem cartItem : cart.getCartItems()) {
-            System.out.println(cartItem);
+        while (!cart.isEmpty()) {
+            System.out.println("아래와 같이 주문 하시겠습니까?\n");
+            System.out.println("[ Orders ]");
+
+            cart.getCartItems().forEach(System.out::println);
+
+            System.out.println("\n[ Total ]");
+            System.out.printf("W %.1f\n\n", cart.getTotalPrice());
+            System.out.println("1. 주문      2. 메뉴 뺴기     3. 메뉴판");
+
+            int input = Integer.parseInt(sc.nextLine());
+
+            switch (input) {
+                case 1:
+                    return true;
+                case 2: {
+                    System.out.print("빼실 메뉴 이름을 입력해주세요: ");
+                    String excludeMenu = sc.nextLine().trim();
+                    excludeMenuItem(excludeMenu);
+                    break;
+                }
+                default:
+                    throw new IllegalArgumentException(String.valueOf(input));
+            }
+
         }
-        System.out.println("\n[ Total ]");
-        System.out.println("W " + cart.getTotalPrice() + "\n");
-        System.out.println("1. 주문      2. 메뉴판");
-
-        int input = Integer.parseInt(sc.nextLine());
-
-        return switch (input) {
-            case 1 -> true;
-            case 2 -> false;
-            default -> throw new IllegalArgumentException(String.valueOf(input));
-        };
+        return false;
     }
 
     private double selectDiscountType() {
@@ -109,6 +120,11 @@ public class Kiosk {
         int displayNum = Integer.parseInt(sc.nextLine());
 
         return DiscountType.get(displayNum).getDiscountRate();
+    }
+
+    private void excludeMenuItem(String excludeMenu) {
+        List<MenuItem> items = cart.getCartItems().stream().filter(item -> !item.getName().equalsIgnoreCase(excludeMenu)).toList();
+        cart.changeCartItems(items);
     }
 
     private void cancelOrder() {

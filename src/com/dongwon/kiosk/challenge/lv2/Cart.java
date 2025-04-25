@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Cart {
-    private final List<MenuItem> cartItems = new ArrayList<>();
+    private List<MenuItem> cartItems = new ArrayList<>();
 
     public void addItem(MenuItem item) {
         cartItems.add(item);
@@ -28,5 +28,9 @@ public class Cart {
 
     public void clear() {
         cartItems.clear();
+    }
+
+    public void changeCartItems(List<MenuItem> cartItems) {
+        this.cartItems = cartItems;
     }
 }
