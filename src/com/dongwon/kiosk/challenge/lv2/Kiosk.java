@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.IntStream;
 
 public class Kiosk {
     private final List<Menu> menus = new ArrayList<>();
@@ -62,10 +63,7 @@ public class Kiosk {
 
     private void printMenus() {
         System.out.println("\n[ MAIN MENU ]");
-        for (int i = 0; i < menus.size(); i++) {
-            int displayNum = toDisplayNum(i);
-            System.out.println(displayNum + ". " + menus.get(i).getCategory());
-        }
+        IntStream.range(0, menus.size()).mapToObj(i -> toDisplayNum(i) + ". " + menus.get(i).getCategory()).forEach(System.out::println);
         System.out.println("0. 종료      | 종료");
     }
 
@@ -138,10 +136,8 @@ public class Kiosk {
         List<MenuItem> menuItems = menus.get(menuIndex).getMenuItems();
 
         System.out.println("\n[ " + categoryName + " MENU ]");
-        for (int i = 0; i < menuItems.size(); i++) {
-            int displayNum = toDisplayNum(i);
-            System.out.println(displayNum + ". " + menuItems.get(i));
-        }
+
+        IntStream.range(0, menuItems.size()).mapToObj(i -> toDisplayNum(i) + ". " + menuItems.get(i)).forEach(System.out::println);
         System.out.println("0. 뒤로가기");
     }
 
