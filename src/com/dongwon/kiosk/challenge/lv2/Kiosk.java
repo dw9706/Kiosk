@@ -27,13 +27,14 @@ public class Kiosk {
                 if (!cart.isEmpty()) printOrderMenu();
 
                 System.out.print("숫자를 입력해주세요: ");
-                int menuNo = Integer.parseInt(sc.nextLine());
-                int menuIndex = toMenuIndex(menuNo);
+                int displayNum = Integer.parseInt(sc.nextLine());
+                int menuIndex = toIndex(displayNum);
                 if (menuIndex == -1) break;
 
                 if (!cart.isEmpty() && isOrderMenu(menuIndex)) {
                     if (menuIndex == orderIndex && askOrder()) {
-                        order();
+                        double discountRate = selectDiscountType();
+                        order(discountRate);
                     } else if (menuIndex == orderCancelIndex) {
                         cancelOrder();
                     }
@@ -44,7 +45,7 @@ public class Kiosk {
                 printMenuItems(menuIndex);
                 System.out.print("숫자를 입력해주세요: ");
                 int menuItemNo = Integer.parseInt(sc.nextLine());
-                int menuItemIndex = toMenuIndex(menuItemNo);
+                int menuItemIndex = toIndex(menuItemNo);
                 if (menuItemIndex == -1) continue;
 
                 printSelectMenuItem(menuIndex, menuItemIndex);
@@ -62,8 +63,8 @@ public class Kiosk {
     private void printMenus() {
         System.out.println("\n[ MAIN MENU ]");
         for (int i = 0; i < menus.size(); i++) {
-            int menuNo = toMenuNo(i);
-            System.out.println(menuNo + ". " + menus.get(i).getCategory());
+            int displayNum = toDisplayNum(i);
+            System.out.println(displayNum + ". " + menus.get(i).getCategory());
         }
         System.out.println("0. 종료      | 종료");
     }
@@ -72,8 +73,8 @@ public class Kiosk {
         int ordersIndex = menus.size();
         int cancelIndex = menus.size() +  1;
         System.out.println("\n[ ORDER MENU ]");
-        System.out.printf("%d. Orders       | 장바구니를 확인 후 주문합니다.\n", toMenuNo(ordersIndex));
-        System.out.printf("%d. Cancel       | 진행중인 주문을 취소합니다.\n", toMenuNo(cancelIndex));
+        System.out.printf("%d. Orders       | 장바구니를 확인 후 주문합니다.\n", toDisplayNum(ordersIndex));
+        System.out.printf("%d. Cancel       | 진행중인 주문을 취소합니다.\n", toDisplayNum(cancelIndex));
     }
 
     private boolean isOrderMenu(int menuIndex) {
@@ -101,20 +102,36 @@ public class Kiosk {
         };
     }
 
+    private double selectDiscountType() {
+        System.out.println("할인 정보를 입력해주세요.");
+        for (DiscountType value : DiscountType.values()) {
+            System.out.println(value.getDisplayNum() + ". " + value);
+        }
+
+        int displayNum = Integer.parseInt(sc.nextLine());
+
+        return DiscountType.get(displayNum).getDiscountRate();
+    }
+
     private void cancelOrder() {
         System.out.println("주문을 취소합니다.");
         cart.clear();
     }
 
-    private void order() {
-        System.out.printf("주문이 완료되었습니다. 금액은 W %.1f 입니다.\n", cart.getTotalPrice());
+    private void order(double discountRate) {
+        double totalPrice = cart.getTotalPrice();
+        double discountPrice = totalPrice * discountRate;
+        double finalPrice = totalPrice - discountPrice;
+        System.out.println("주문이 완료되었습니다.");
+        System.out.printf("주문 금액 : %.1f, 할인 금액 : %.2f\n", totalPrice, discountPrice);
+        System.out.printf("금액은 W %.2f 입니다.\n", finalPrice);
         cart.clear();
     }
 
     private void printMenuItems(int menuIndex) {
         // 메뉴 인덱스 유효성 검증
         if (0 > menuIndex || menuIndex >= menus.size())
-            throw new IllegalArgumentException(String.valueOf(toMenuNo(menuIndex)));
+            throw new IllegalArgumentException(String.valueOf(toDisplayNum(menuIndex)));
 
         Menu menu = menus.get(menuIndex);
         String categoryName = menu.getCategory().toUpperCase();
@@ -122,8 +139,8 @@ public class Kiosk {
 
         System.out.println("\n[ " + categoryName + " MENU ]");
         for (int i = 0; i < menuItems.size(); i++) {
-            int menuNo = toMenuNo(i);
-            System.out.println(menuNo + ". " + menuItems.get(i));
+            int displayNum = toDisplayNum(i);
+            System.out.println(displayNum + ". " + menuItems.get(i));
         }
         System.out.println("0. 뒤로가기");
     }
@@ -132,7 +149,7 @@ public class Kiosk {
         List<MenuItem> menuItems = menus.get(menuIndex).getMenuItems();
         // 메뉴 아이템 인덱스 유효성 검증
         if (0 > menuItemIndex || menuItemIndex >= menuItems.size())
-            throw new IllegalArgumentException(String.valueOf(toMenuNo(menuItemIndex)));
+            throw new IllegalArgumentException(String.valueOf(toDisplayNum(menuItemIndex)));
 
         System.out.print("선택한 메뉴: ");
         System.out.println(menuItems.get(menuItemIndex) + "\n");
@@ -160,14 +177,14 @@ public class Kiosk {
     /*
      * 입력값을 프로그램 내부에서 사용하는 메뉴 인덱스 값으로 변환
      * */
-    private int toMenuIndex(int no) {
+    private int toIndex(int no) {
         return no - 1;
     }
 
     /*
      * 프로그램 내부의 메뉴 인덱스 값을 고객에게 보여지는 메뉴 넘버로 변환
      * */
-    private int toMenuNo(int i) {
+    private int toDisplayNum(int i) {
         return i + 1;
     }
 }
