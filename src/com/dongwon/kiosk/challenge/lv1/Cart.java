@@ -22,4 +22,11 @@ public class Cart {
         return cartItems.isEmpty();
     }
 
+    public List<MenuItem> getCartItems() {
+        return cartItems;
+    }
+
+    public void clear() {
+        cartItems.clear();
+    }
 }
