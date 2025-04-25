@@ -7,6 +7,7 @@ import java.util.Scanner;
 
 public class Kiosk {
     private final List<Menu> menus = new ArrayList<>();
+    private final Cart cart = new Cart();
     private final Scanner sc = new Scanner(System.in);
 
     public Kiosk(Menu... menus) {
@@ -31,6 +32,7 @@ public class Kiosk {
                 if(menuItemIndex == -1) continue;
 
                 printSelectMenuItem(menuIndex, menuItemIndex);
+                askAddMenuItemToCart(menuIndex,menuItemIndex);
 
             } catch (IllegalArgumentException e) {
                 System.out.println("올바르지 않은 입력값입니다: " + e.getMessage() + "\n");
@@ -73,6 +75,24 @@ public class Kiosk {
 
         System.out.print("선택한 메뉴: ");
         System.out.println(menuItems.get(menuItemIndex) + "\n");
+    }
+
+    private void askAddMenuItemToCart(int menuIndex, int menuItemIndex) {
+        MenuItem menuItem = menus.get(menuIndex).getMenuItems().get(menuItemIndex);
+        System.out.printf("\"%s\"\n",menuItem);
+        System.out.println("위 메뉴를 장바구니에 추가하시겠습니까?");
+        System.out.println("1. 확인        2. 취소");
+        int input = Integer.parseInt(sc.nextLine());
+        switch (input) {
+            case 1 :
+                cart.addItem(menuItem);
+                System.out.println(menuItem.getName()+" 이 장바구니에 추가되었습니다.");
+                break;
+            case 2 : {
+                break;
+            }
+            default: throw new IllegalArgumentException(String.valueOf(input));
+        }
     }
 
     /*
