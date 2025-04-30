@@ -18,7 +18,7 @@ public class Kiosk {
     public void start() {
         while (true) {
             try {
-                //주문 할 때 주문 번호와 취소 번호 미리 초기화
+                //주문 메뉴 번호와 취소 번호 미리 초기화
                 int orderIndex = menus.size();
                 int orderCancelIndex = menus.size() + 1;
 
