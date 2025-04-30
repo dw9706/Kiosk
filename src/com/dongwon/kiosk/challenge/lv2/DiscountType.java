@@ -1,7 +1,7 @@
 package com.dongwon.kiosk.challenge.lv2;
 
 public enum DiscountType{
-    // ordinal X
+    // ordinal은 사용하지 않음.
     VETERAN(1,"국가유공자",0.1), // 국가유공자
     SOLDIER(2,"군인",0.05), // 군인
     STUDENT(3,"학생",0.03), // 학생

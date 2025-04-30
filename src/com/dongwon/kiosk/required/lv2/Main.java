@@ -8,6 +8,7 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
+        // while문이 실행되기 전에 Item들을 세팅
         List<MenuItem> menus = new ArrayList<>(Arrays.asList(
                 new MenuItem("ShackBurger", 6.9, "토마토, 양상추, 쉑소스가 토핑된 치즈버거"),
                 new MenuItem("SmokeShack", 8.9, "베이컨, 체리 페퍼에 쉑소스가 토핑된 치즈버거"),
@@ -16,6 +17,7 @@ public class Main {
         ));
 
         while (true) {
+            // 메뉴 출력
             System.out.println("[ SHAKESHACK MENU ]");
             for (int i = 0; i < menus.size(); i++) {
                 int menuNo = toMenuNo(i);
@@ -33,6 +35,7 @@ public class Main {
                 int menuIndex = toMenuIndex(input);
                 int menuNo = toMenuNo(menuIndex);
 
+                // 입력값 유효성 검증
                 if (0 <= menuIndex && menuIndex <= 3) System.out.println(menuNo + ". " + menus.get(menuIndex) + "\n");
                 else if (menuIndex == -1) {
                     System.out.println("프로그램을 종료합니다.");

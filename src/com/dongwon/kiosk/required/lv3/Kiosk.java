@@ -11,6 +11,7 @@ public class Kiosk {
     public void start() {
         Scanner sc = new Scanner(System.in);
         while (true) {
+            //메뉴 출력
             System.out.println("[ SHAKESHACK MENU ]");
             for (int i = 0; i < menus.size(); i++) {
                 int menuNo = toMenuNo(i);
@@ -28,6 +29,7 @@ public class Kiosk {
                 int menuIndex = toMenuIndex(input);
                 int menuNo = toMenuNo(menuIndex);
 
+                // 입력값 유효성 검증
                 if (0 <= menuIndex && menuIndex <= 3) System.out.println(menuNo + ". " + menus.get(menuIndex) + "\n");
                 else if (menuIndex == -1) {
                     System.out.println("프로그램을 종료합니다.");

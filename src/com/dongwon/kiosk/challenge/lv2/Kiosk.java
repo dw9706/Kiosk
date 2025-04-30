@@ -25,6 +25,7 @@ public class Kiosk {
 
                 // 메뉴 목록 출력
                 printMenus();
+                // 장바구니가 비어져 있지 않다면 주문 메뉴 출력
                 if (!cart.isEmpty()) printOrderMenu();
 
                 System.out.print("숫자를 입력해주세요: ");
@@ -32,10 +33,14 @@ public class Kiosk {
                 int menuIndex = toIndex(displayNum);
                 if (menuIndex == -1) break;
 
+                // 장바구니가 비어져있는지 확인 -> 입력값이 주문 메뉴 번호값인지 확인
                 if (!cart.isEmpty() && isOrderMenu(menuIndex)) {
+                    // 주문
                     if (menuIndex == orderIndex && askOrder()) {
+                        // 할인 정보를 출력 후 사용자가 선택한 할인율을 반환 받음.
                         double discountRate = selectDiscountType();
                         order(discountRate);
+                    // 취소
                     } else if (menuIndex == orderCancelIndex) {
                         cancelOrder();
                     }
@@ -49,9 +54,12 @@ public class Kiosk {
                 int menuItemIndex = toIndex(menuItemNo);
                 if (menuItemIndex == -1) continue;
 
+                // 선택된 메뉴 아이템 출력
                 printSelectMenuItem(menuIndex, menuItemIndex);
+                // 선택한 아이템을 장바구니에 추가할지 확인하고, 입력값에 따라 아이템을 장바구니에 추가.
                 askAddMenuItemToCart(menuIndex, menuItemIndex);
 
+                // 모든 예외는 언체크로 던져져 이곳에서 처리.
             } catch (IllegalArgumentException e) {
                 System.out.println("올바르지 않은 입력값입니다: " + e.getMessage() + "\n");
             }
@@ -118,12 +126,14 @@ public class Kiosk {
         }
 
         int displayNum = Integer.parseInt(sc.nextLine());
-
+        // 선택한 할인 종류의 번호를 통해 Enum 타입을 반환받고 그 타입의 할인율을 반환
         return DiscountType.get(displayNum).getDiscountRate();
     }
 
     private void excludeMenuItem(String excludeMenu) {
+        // 제외 메뉴를 제외하고 MenuItem 리스트를 새로 만든다.
         List<MenuItem> items = cart.getCartItems().stream().filter(item -> !item.getName().equalsIgnoreCase(excludeMenu)).toList();
+        // 기존 MenuItem리스트를 제외 메뉴를 제외하고 새로 만든 MenuItem리스트로 변경한다.
         cart.changeCartItems(items);
     }
 

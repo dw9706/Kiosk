@@ -7,6 +7,7 @@ import java.util.Scanner;
 
 public class Kiosk {
     private final List<Menu> menus = new ArrayList<>();
+    //  Scanner를 인스턴스 변수로 선언하여 여러 메서드 영역에서 자유롭게 접근.
     private final Scanner sc = new Scanner(System.in);
 
     public Kiosk(Menu... menus) {
@@ -23,13 +24,14 @@ public class Kiosk {
                 int menuIndex = toMenuIndex(menuNo);
                 if(menuIndex == -1) break;
 
-                // 메뉴 아이템 출력
+                // 메뉴 아이템 목록 출력
                 printMenuItems(menuIndex);
                 System.out.print("숫자를 입력해주세요: ");
                 int menuItemNo = Integer.parseInt(sc.nextLine());
                 int menuItemIndex = toMenuIndex(menuItemNo);
                 if(menuItemIndex == -1) continue;
 
+                // 선택된 메뉴 아이템 출력
                 printSelectMenuItem(menuIndex, menuItemIndex);
 
             } catch (IllegalArgumentException e) {
@@ -69,9 +71,11 @@ public class Kiosk {
     private void printSelectMenuItem(int menuIndex, int menuItemIndex) {
         List<MenuItem> menuItems = menus.get(menuIndex).getMenuItems();
         // 메뉴 아이템 인덱스 유효성 검증
+        // menuIndex는 printMenuItems 에서 검증했기 때문에 하지 않음.
         if (0 > menuItemIndex || menuItemIndex >= menuItems.size()) throw new IllegalArgumentException(String.valueOf(toMenuNo(menuItemIndex)));
 
         System.out.print("선택한 메뉴: ");
+        // menuItem에 toString을 재정의하여 객체를 바로 출력
         System.out.println(menuItems.get(menuItemIndex) + "\n");
     }
 

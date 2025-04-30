@@ -24,6 +24,7 @@ public class Kiosk {
 
                 // 메뉴 목록 출력
                 printMenus();
+                // 장바구니가 비어져 있지 않다면 주문 메뉴 출력
                 if (!cart.isEmpty()) printOrderMenu();
 
                 System.out.print("숫자를 입력해주세요: ");
@@ -31,9 +32,12 @@ public class Kiosk {
                 int menuIndex = toMenuIndex(menuNo);
                 if (menuIndex == -1) break;
 
+                // 장바구니가 비어져있는지 확인 -> 입력값이 주문 메뉴 번호값인지 확인
                 if (!cart.isEmpty() && isOrderMenu(menuIndex)) {
+                    // 주문
                     if (menuIndex == orderIndex && askOrder()) {
                         order();
+                    // 취소
                     } else if (menuIndex == orderCancelIndex) {
                         cancelOrder();
                     }
@@ -47,9 +51,12 @@ public class Kiosk {
                 int menuItemIndex = toMenuIndex(menuItemNo);
                 if (menuItemIndex == -1) continue;
 
+                // 선택된 메뉴 아이템 출력
                 printSelectMenuItem(menuIndex, menuItemIndex);
+                // 선택한 아이템을 장바구니에 추가할지 확인하고, 입력값에 따라 아이템을 장바구니에 추가.
                 askAddMenuItemToCart(menuIndex, menuItemIndex);
 
+                // 모든 예외는 언체크로 던져져 이곳에서 처리.
             } catch (IllegalArgumentException e) {
                 System.out.println("올바르지 않은 입력값입니다: " + e.getMessage() + "\n");
             }
@@ -139,6 +146,7 @@ public class Kiosk {
     }
 
     private void askAddMenuItemToCart(int menuIndex, int menuItemIndex) {
+        // printMenuItems와 printSelectMenuItem에서 매개변수에 대한 유효성 검증을 했으므로 유효성 검사 패스
         MenuItem menuItem = menus.get(menuIndex).getMenuItems().get(menuItemIndex);
         System.out.printf("\"%s\"\n", menuItem);
         System.out.println("위 메뉴를 장바구니에 추가하시겠습니까?");

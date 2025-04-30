@@ -13,6 +13,7 @@ public class Main {
         menus[4] = "4. Hamburger     | W 5.4 | 비프패티를 기반으로 야채가 들어간 기본버거";
 
         while (true) {
+            // 메뉴 출력
             System.out.println("[ SHAKESHACK MENU ]");
             for (int i = 1; i < menus.length; i++) {
                 System.out.println(menus[i]);
@@ -21,6 +22,7 @@ public class Main {
             System.out.print("숫자를 입력해주세요.(0~4사이 숫자): ");
             int input = Integer.parseInt(sc.nextLine());
 
+            // 입력값 유효성 검증
             if (1 <= input && input <= 4) System.out.println(menus[input] + "\n");
             else if (input == 0) {
                 System.out.println("프로그램을 종료합니다.");
