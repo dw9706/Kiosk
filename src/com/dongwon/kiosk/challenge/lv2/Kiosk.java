@@ -40,7 +40,7 @@ public class Kiosk {
                         // 할인 정보를 출력 후 사용자가 선택한 할인율을 반환 받음.
                         double discountRate = selectDiscountType();
                         order(discountRate);
-                    // 취소
+                        // 취소
                     } else if (menuIndex == orderCancelIndex) {
                         cancelOrder();
                     }
@@ -131,10 +131,22 @@ public class Kiosk {
     }
 
     private void excludeMenuItem(String excludeMenu) {
+        // ** 변경 전 **
         // 제외 메뉴를 제외하고 MenuItem 리스트를 새로 만든다.
-        List<MenuItem> items = cart.getCartItems().stream().filter(item -> !item.getName().equalsIgnoreCase(excludeMenu)).toList();
+        // List<MenuItem> items = cart.getCartItems().stream().filter(item -> !item.getName().equalsIgnoreCase(excludeMenu)).toList();
         // 기존 MenuItem리스트를 제외 메뉴를 제외하고 새로 만든 MenuItem리스트로 변경한다.
-        cart.changeCartItems(items);
+        // cart.changeCartItems(items);
+
+
+        // ** 변경 후 **
+        // 제외 메뉴를 하나만 삭제
+        List<MenuItem> cartItems = cart.getCartItems();
+        for (int i = 0; i < cartItems.size(); i++) {
+            if (cartItems.get(i).getName().equalsIgnoreCase(excludeMenu)) {
+                cartItems.remove(i);
+                return;
+            }
+        }
     }
 
     private void cancelOrder() {
